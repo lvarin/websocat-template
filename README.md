@@ -19,14 +19,17 @@ The process has 3 steps:
 3. Deploy the template
 
 ```
- oc process -f websocat-template.yaml -p DATABASE_SERVICE=mongodb -p DATABASE_PORT=27017 | oc create -f -
+ oc process -f websocat-template.yaml -p DATABASE_SERVICE=mongodb \
+            -p DATABASE_PORT=27017 | oc create -f -
 ```
 
 Change `mongodb` and `27017` for the ports where the service is deployed.
 
 The websocket should be ready in few minutes in:
 
-<wss://websocat-<project-name>.rahtiapp.fi>
+```
+wss://websocat-<project-name>.rahtiapp.fi
+```
 
 Where `<project-name>` is the name of the project you created.
 
