@@ -2,9 +2,11 @@
 
 **THIS IS A BETA TEMPLATE, not supported**
 
-This template deploys a websocket proxy server. This proxy server will run in Kubernetes, and it will create a connection to the service configured to the user. Then it will create a Websocket entrypoint. Any traffic coming to the websocket will relied to the configured service. The following drawing example uses mongoDB as `service`.
+This template deploys a websocket proxy server using `websocat`. This proxy server will run in Kubernetes (OpenShift OKD/Rahti), and it will create a connection to the service configured by the user. Then it will create a Websocket entrypoint listeing to traffic. The "other side of the tunnel", in the client side, requires to run `websocat` as well. The following drawing example uses mongoDB as `service`.
 
 ![Proxy](websocat-diagram.drawio.png)
+
+Traffic will come to the `websocat` client to any given configured port, it will be then translated to be transmittend suing a "binary websocket", and relied to the websocket entrypoint in OpenShift OKD/Rahti. This traffic will be "translated back" to the original format before `websocat` was involded and relied to the configured service in the configured port.
 
 This template is written with OpenShift OKD/Rahti in mind, but it should work in any kubernetes with minor modifications.
 
@@ -12,7 +14,7 @@ This template is written with OpenShift OKD/Rahti in mind, but it should work in
 
 The process has 3 steps:
 
-1. Login into Rahti/Kubernetes, follow the following guides: to [get access to Rahti](https://docs.csc.fi/cloud/rahti/access/) and to [login wirth OC](https://docs.csc.fi/cloud/rahti/usage/cli/#how-to-login-with-oc).
+1. Login into Rahti/Kubernetes, you can follow these guides: to [get access to Rahti](https://docs.csc.fi/cloud/rahti/access/) and to [login with OC](https://docs.csc.fi/cloud/rahti/usage/cli/#how-to-login-with-oc).
 
 2. Create a namespace, follow the [Creating a project](https://docs.csc.fi/cloud/rahti/usage/projects_and_quota/#creating-a-project) guide.
 
@@ -23,9 +25,7 @@ The process has 3 steps:
             -p DATABASE_PORT=27017 | oc create -f -
 ```
 
-Change `mongodb` and `27017` for the ports where the service is deployed.
-
-The websocket should be ready in few minutes in:
+Change `mongodb` and `27017` for the servie and port where the deployment is. The websocket should be ready in few minutes in:
 
 ```
 wss://websocat-<project-name>.rahtiapp.fi
@@ -37,7 +37,7 @@ Where `<project-name>` is the name of the project you created.
 
 A prebuilt image is already included in the template. These instructions are in case you need to rebuild it.
 
-As `websocat` is coded on `rust`, the docker file is very simple:
+As `websocat` is coded on `rust`, the docker file simply uses `cargo` to build the image:
 
 ```
 FROM rust
@@ -53,5 +53,4 @@ to build it simply do:
 $ docker build . -t lvarin/websocat
 ```
 
-Change `lvarin/websocat` for the name of the image you want to build.
-
+Change `lvarin/websocat` to the name and tag of the image you want to build.
