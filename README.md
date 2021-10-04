@@ -6,7 +6,7 @@ This template deploys a websocket proxy server using `websocat`. This proxy serv
 
 ![Proxy](websocat-diagram.drawio.png)
 
-Traffic will come to the `websocat` client to any given configured port, it will be then translated to be transmittend suing a "binary websocket", and relied to the websocket entrypoint in OpenShift OKD/Rahti. This traffic will be "translated back" to the original format before `websocat` was involded and relied to the configured service in the configured port.
+Traffic will come to the `websocat` client to any given configured port, it will be then translated to be transmittend suing a "binary websocket", and relayed to the websocket entrypoint in OpenShift OKD/Rahti. This traffic will be "translated back" to the original format before `websocat` was involded and relayed to the configured service in the configured port.
 
 This template is written with OpenShift OKD/Rahti in mind, but it should work in any kubernetes with minor modifications.
 
@@ -18,7 +18,9 @@ The process has 3 steps:
 
 2. Create a namespace, follow the [Creating a project](https://docs.csc.fi/cloud/rahti/usage/projects_and_quota/#creating-a-project) guide.
 
-3. Deploy the template
+3. Deploy the database or service you want `websocat` to proxy. In this example we use a `mongodb` service deployed in the standard port `27017`.
+ 
+4. Deploy the template
 
 ```
  oc process -f websocat-template.yaml -p DATABASE_SERVICE=mongodb \
