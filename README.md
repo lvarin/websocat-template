@@ -11,7 +11,7 @@ to run `websocat` as well. The following drawing example uses mongoDB as `servic
 ![Proxy](websocat-diagram.drawio.png)
 
 Traffic will come to the `websocat` client to any given configured port, it will be
-then translated to be transmitted suing a "binary websocket", and relayed to the
+then translated to be transmitted using a "binary websocket", and relayed to the
 websocket entry point in OpenShift OKD/Rahti. This traffic will be "translated back"
 to the original format before `websocat` was involved and relayed to the configured
 service in the configured port.
