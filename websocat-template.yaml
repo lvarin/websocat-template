@@ -40,7 +40,6 @@ objects:
           - containerPort: 8080
             protocol: TCP
           args:
-          - 'websocat'
           - '-b'
           - 'ws-l:0.0.0.0:8080'
           - 'tcp:${DATABASE_SERVICE}:${DATABASE_PORT}'
