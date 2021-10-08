@@ -26,11 +26,13 @@ oc new project <NAME> --description='csc_project: <NUMBER>'
 
 ![oc new-project](oc-new-project.png)
 
-* Launch mongoDB template
+* Launch the mongoDB persistent template
 
 ```
 oc get template mongodb-persistent -n openshift -o yaml | oc process -f - | oc create -f -
 ```
+
+This will launch the database using the default parameters. The DB will be available internally to the Rahti project in the DNS mongodb port 27017. In order to see the available parameters and itsw default values, you can run `oc process mongodb-persistent -n openshift --parameters`.
 
 ![oc template mongodb](oc-template-mongodb.png)
 
@@ -41,6 +43,8 @@ git clone https://github.com/lvarin/websocat-template.git
 oc process -f websocat-template/websocat-template.yaml -p DATABASE_SERVICE=mongodb -p DATABASE_PORT=27017 | oc create -f -
 ```
 
+This will launch the websocat proxy. It assumes that the DB was launched using the default parameters.
+
 ![oc template websocat](oc-template-websocat.png)
 
 * Write down URL
@@ -49,7 +53,21 @@ oc process -f websocat-template/websocat-template.yaml -p DATABASE_SERVICE=mongo
 oc get route
 ```
 
+The Host can be found under `HOST/PORT`.
+
 ![oc get route](oc-get-route.png)
 
-The Host can be found under `HOST/PORT`.
+* See the username and password of mongodb
+
+The username and password have been generated automatically, the password is 16 random alphanumeric characters long, and the user is the word `user` plus 3 random alphanumeric characters. They are stored in a `secret`:
+
+
+```
+oc get secret/mongodb -o json | jq ' .data."database-password" ' -r | base64 -d
+```
+
+```
+oc get secret/mongodb -o json | jq ' .data."database-user" ' -r | base64 -d
+```
+
 
