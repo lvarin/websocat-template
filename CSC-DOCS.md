@@ -36,6 +36,8 @@ This will launch the database using the default parameters. The DB will be avail
 
 ![oc template mongodb](oc-template-mongodb.png)
 
+This template can be also launched using the catalog from the [web interface](https://rahti.csc.fi:8443/). Once in the catalog, select `MongoDB`, and follow the process.
+
 * Launch websocat template
 
 ```
